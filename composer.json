@@ -1,0 +1,27 @@
+{
+  "name": "volyanytsky/mypdo",
+  "description": "PHP PDO Helper",
+  "version": "1.0.0",
+  "type": "library",
+  "homepage": "https://github.com/volyanytsky",
+  "time": "2018-07-06",
+  "license": "WTFPL",
+  "authors": [
+    {
+      "name": "Sergey Volyanytsky",
+      "email": "sergey.volyanytsky@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Volyanytsky\\Database\\": "src/"
+    }
+  },
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/volyanytsky/mypdo/"
+    }
+  ]
+}

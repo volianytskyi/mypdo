@@ -32,14 +32,18 @@ class MyPdo
     if(empty($this->connection))
     {
       $dsn = "$this->type:host=$this->host.;dbname=$this->name;charset=$this->charset";
-      $this->connection = new PDO($dsn, $this->user, $this->pass, $this->options);
+      try {
+        $this->connection = new \PDO($dsn, $this->user, $this->pass, $this->options);
+      } catch (\PDOException $e) {
+        throw new MyPdoException($e->getMessage());
+      }
     }
     return $this->connection;
   }
 
   public function setConnectionOptions(array $options)
   {
-    $this->setConnectionOptions($db->getOptions());
+    $this->options = $options;
     $this->connection = null;
   }
 
@@ -111,14 +115,21 @@ class MyPdo
 
   public function execute($query, $args = [], $isInsert = false)
   {
-    $connection = $this->connect();
-    $stn = $connection->prepare($query);
-    $stn->execute($args);
-    if($isInsert)
-    {
-      return $connection->lastInsertId();
+    try {
+
+      $connection = $this->connect();
+      $stn = $connection->prepare($query);
+      $stn->execute($args);
+      if($isInsert)
+      {
+        return $connection->lastInsertId();
+      }
+      return $stn;
+
+    } catch (\PDOException $e) {
+      throw new MyPdoException($e->getMessage());
     }
-    return $stn;
+
   }
 
   public function fetch($query, $args = [])
@@ -150,8 +161,7 @@ class MyPdo
   {
     $data = $this->fetchAll("SHOW TABLES FROM ".$this->name);
     $tables = array_column($data, 'Tables_in_'.$this->name);
-    (in_array($table, $tables)) ? $res = true : $res = false;
-    return $res;
+    return in_array($table, $tables);
   }
 
   static private function serializeData($data)
