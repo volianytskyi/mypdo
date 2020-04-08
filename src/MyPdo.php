@@ -31,7 +31,7 @@ class MyPdo
   {
     if(empty($this->connection))
     {
-      $dsn = "$this->type:host=$this->host.;dbname=$this->name;charset=$this->charset";
+      $dsn = "$this->type:host=$this->host;dbname=$this->name;charset=$this->charset";
       try {
         $this->connection = new \PDO($dsn, $this->user, $this->pass, $this->options);
       } catch (\PDOException $e) {
